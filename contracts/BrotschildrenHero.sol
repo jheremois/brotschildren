@@ -38,22 +38,22 @@ function createBrotschildren(
    return _brotschildrens.lenght;
    }
 }
-require(offset <= fundraisersCount(), "offset out of bounds");
+require(offset <= brotschildrensCount(), "offset out of bounds");
 
-function fundraisers(uint256 limit, uint256 offset)
+function brotschildrens(uint256 limit, uint256 offset)
     public
     view
-    returns(Fundraiser[] memory coll)
+    returns(Brotschildren[] memory coll)
 {
-    require(offset <= fundraisersCount(), "offset out of bounds");
+    require(offset <= brotschildrensCount(), "offset out of bounds");
 
-    uint256 size = fundraisersCount() - offset;
+    uint256 size = brotschildrensCount() - offset;
     size = size < limit ? size : limit;
     size = size < maxLimit ? size : maxLimit;
-    coll = new Fundraiser[](size);
+    coll = new Brotschildren[](size);
 
     for(uint256 i = 0; i < size; i++) {
-        coll[i] = _fundraisers[offset + i];
+        coll[i] = _brotschildrens[offset + i];
     }
 
     return coll;
