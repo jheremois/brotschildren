@@ -1,9 +1,13 @@
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract Brotschildren is Ownable {
+     using SafeMath for uint256;
+
 
     event Withdraw(uint256 amount);
 
@@ -21,9 +25,11 @@ contract Brotschildren is Ownable {
    string public imageURL;
    string public description;
 
+ uint256 public totalDonations;
+   uint256 public donationsCount;
    address payable public beneficiary;
 
-    constructor(
+constructor(
     string memory _name,
     string memory _url,
     string memory _imageURL,
@@ -39,7 +45,7 @@ contract Brotschildren is Ownable {
   imageURL = _imageURL;
   description = _description;
   beneficiary = _beneficiary;
-  _transferOwnership(_custodian);
+  transferOwnership(_custodian);
 
     }
 
@@ -56,6 +62,7 @@ function donate() public payable {
         value: msg.value,
         date: block.timestamp
     });
+
    _donations[msg.sender].push(donation);
    totalDonations = totalDonations.add(msg.value);
    donationsCount++;
@@ -86,10 +93,20 @@ function withdraw() public onlyOwner {
     uint256 balance = address(this).balance;
     beneficiary.transfer(balance);
     emit Withdraw(balance);
-  }
+    }
+}
 
-function () external payable {
+function multipleReturns() pure public returns(uint256, uint256) {
+    return (1, 2);
+}
+
+function multipleReturnsWithNames() pure public returns(uint256 a, uint256 b) {
+    a = 1;
+    b = 2;
+    return (a, b);
+} 
+
+function callfallback() external payable {
     totalDonations = totalDonations.add(msg.value);
     donationsCount++;
-}
 }

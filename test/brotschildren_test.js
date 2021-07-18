@@ -63,6 +63,78 @@ contract("Brotschildren", accounts => {
                 assert.equal(actual, owner, "bios should match");
             });
 
+            describe("making donations", () => {
+              const value = web3.utils.toWei('0.0289');
+              const donor = accounts[2];
+          
+              it("increases myDonationsCount");
+              it("includes donation in myDonations");
+            });
+          });
+           
+          it("increases myDonationsCount", async () => {
+            const currentDonationsCount = await brotschildren.myDonationsCount(
+              {from: donor}
+            );
+          
+            await brotschildren.donate({from: donor, value});
+          
+            const newDonationsCount = await brotschildren.myDonationsCount(
+              {from: donor}
+            );
+          
+            assert.equal(
+              1,
+              newDonationsCount - currentDonationsCount,
+              "myDonationsCount should increment by 1");
+          })
+          
+          it("includes donation in myDonations", async () => {
+            await brotschildren.donate({from: donor, value});
+            const {values, dates} = await brotschildren.myDonations(
+              {from: donor}
+            );
+          
+            assert.equal(
+              value,
+              values[0],
+              "values should match"
+            );
+            assert(dates[0], "date should be present");
+          });
+          
+          it("increases the totalDonations amount", async () => {
+            const currentTotalDonations = await brotschildren.totalDonations();
+            await brotschildren.donate({from: donor, value});
+            const newTotalDonations = await brotschildren.totalDonations();
+          
+            const diff = newTotalDonations - currentTotalDonations;
+          
+            assert.equal(
+              diff,
+              value,
+              "difference should match the donation value"
+            )
+          });
+          it("increases donationsCount", async () => {
+            const currentDonationsCount = await brotschildren.donationsCount();
+            await brotschildren.donate({from: donor, value});
+            const newDonationsCount = await brotschildren.donationsCount();
+          
+            assert.equal(
+              1,
+              newDonationsCount - currentDonationsCount,
+              "donationsCount should increment by 1");
+          });
+          
+          it("emits the DonationReceived event", async () => {
+            const tx = await brotschildren.donate({from: donor, value});
+            const expectedEvent = "DonationReceived";
+            const actualEvent = tx.logs[0].event;
+          
+            assert.equal(actualEvent, expectedEvent, "events should match");
+          });
+
      describe("setBeneficiary", () => {
           const newBeneficiary = accounts[2];
 
@@ -91,7 +163,7 @@ contract("Brotschildren", accounts => {
               );
             });
           
-            describe("access controls", () => {
+        describe("access controls", () => {
               it("throws an error when called from a non-owner account", async () => {
                 try {
                   await brotschildren.withdraw({from: accounts[3]});

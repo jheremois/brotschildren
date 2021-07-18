@@ -1,4 +1,5 @@
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.3;
 
 import "./brotschildren.sol";
 
@@ -29,16 +30,14 @@ function createBrotschildren(
           emit BrotschildrenCreated(brotschildren);
     }
  
-    function BrotschildrenCount() public view returns(uint256) {
+function BrotschildrenCount() public view returns(uint256) {
     return _brotschildrens.lenght;
 
     }
 
-   function BrotschildrenCount() public view returns (uint256) {
+function BrotschildrenCount() public view returns (uint256) {
    return _brotschildrens.lenght;
    }
-}
-require(offset <= brotschildrensCount(), "offset out of bounds");
 
 function brotschildrens(uint256 limit, uint256 offset)
     public
@@ -57,4 +56,4 @@ function brotschildrens(uint256 limit, uint256 offset)
     }
 
     return coll;
-}
+}}
